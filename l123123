@@ -1,0 +1,73 @@
+--aura
+
+if _G.HamstaScriptLoaded then
+    -- Already Loaded -- Reload..
+    _G.HamstaScriptLoaded = false;
+    pcall(function()
+        game.CoreGui.ScreenGui:Destroy() -- Remove Old.
+    end)
+ end
+ 
+ -- Load Script
+ _G.HamstaScriptLoaded = true;
+ 
+--pro gamer move
+ 
+ local library = loadstring(game:HttpGet("https://pastebin.com/raw/CkyR8ePz", true))()
+ local w = library:CreateWindow('Test')
+ 
+ w:Section('Created by HamstaGang edited by masashi')
+ 
+
+ local c = w:Toggle('Punch Aura', {flag = "PAura"})
+ local d = w:Toggle('God Mode (Healing)', {flag = "GMode"})
+ 
+ spawn(function()
+    pcall(function()
+        while wait() do
+            if w.flags.GMode then
+                if game.Players.LocalPlayer.PlayerGui:FindFirstChild("ScreenGui").ability.Text:match("Healing") then -- Healing ability
+                    game:GetService("ReplicatedStorage").SkillRemotes.Heal:FireServer(game.Players.LocalPlayer.Character)
+                else
+                    w.flags.GMode = false;
+                end
+            end
+        end
+    end)
+ end)
+ 
+ spawn(function()
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+ 
+    local function GetClosest()
+        local Character = LocalPlayer.Character
+        local HumanoidRootPart = Character and Character:FindFirstChild("HumanoidRootPart")
+        if not (Character or HumanoidRootPart) then return end
+ 
+        local TargetDistance = 100
+        local Target
+ 
+        for i,v in ipairs(Players:GetPlayers()) do
+            if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                local TargetHRP = v.Character.HumanoidRootPart
+                local mag = (HumanoidRootPart.Position - TargetHRP.Position).magnitude
+                if mag < TargetDistance then
+                    TargetDistance = mag
+                    Target = v
+                end
+            end
+        end
+ 
+        return Target
+    end
+ 
+    while wait(0.5) do
+        if w.flags.PAura then
+            -- Find closest and kill
+            local Em_Humanoid = GetClosest().Character.Humanoid
+            game:GetService("Players").LocalPlayer.Backpack.notcombo.R("LightAttack"):FireServer(Em_Humanoid, 6, 0)
+            game:GetService("Players").LocalPlayer.Backpack.notcombo.R("LightAttack"):FireServer(Em_Humanoid, 1, 0)
+        end
+    end
+ end)
